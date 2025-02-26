@@ -1,4 +1,7 @@
-local httpService = game:GetService('HttpService')
+
+local cloneref = cloneref or function(...) return ... end
+
+local httpService = cloneref(game:GetService('HttpService'))
 
 local SaveManager = {} do
 	SaveManager.Folder = 'LinoriaLibSettings'
@@ -9,8 +12,8 @@ local SaveManager = {} do
 				return { type = 'Toggle', idx = idx, value = object.Value } 
 			end,
 			Load = function(idx, data)
-				if Toggles[idx] then 
-					Toggles[idx]:SetValue(data.value)
+				if SaveManager.Library.Toggles[idx] then 
+					SaveManager.Library.Toggles[idx]:SetValue(data.value)
 				end
 			end,
 		},
@@ -19,8 +22,8 @@ local SaveManager = {} do
 				return { type = 'Slider', idx = idx, value = tostring(object.Value) }
 			end,
 			Load = function(idx, data)
-				if Options[idx] then 
-					Options[idx]:SetValue(data.value)
+				if SaveManager.Library.Options[idx] then 
+					SaveManager.Library.Options[idx]:SetValue(data.value)
 				end
 			end,
 		},
@@ -29,8 +32,8 @@ local SaveManager = {} do
 				return { type = 'Dropdown', idx = idx, value = object.Value, mutli = object.Multi }
 			end,
 			Load = function(idx, data)
-				if Options[idx] then 
-					Options[idx]:SetValue(data.value)
+				if SaveManager.Library.Options[idx] then 
+					SaveManager.Library.Options[idx]:SetValue(data.value)
 				end
 			end,
 		},
@@ -39,8 +42,8 @@ local SaveManager = {} do
 				return { type = 'ColorPicker', idx = idx, value = object.Value:ToHex(), transparency = object.Transparency }
 			end,
 			Load = function(idx, data)
-				if Options[idx] then 
-					Options[idx]:SetValueRGB(Color3.fromHex(data.value), data.transparency)
+				if SaveManager.Library.Options[idx] then 
+					SaveManager.Library.Options[idx]:SetValueRGB(Color3.fromHex(data.value), data.transparency)
 				end
 			end,
 		},
@@ -49,8 +52,8 @@ local SaveManager = {} do
 				return { type = 'KeyPicker', idx = idx, mode = object.Mode, key = object.Value }
 			end,
 			Load = function(idx, data)
-				if Options[idx] then 
-					Options[idx]:SetValue({ data.key, data.mode })
+				if SaveManager.Library.Options[idx] then 
+					SaveManager.Library.Options[idx]:SetValue({ data.key, data.mode })
 				end
 			end,
 		},
@@ -60,8 +63,8 @@ local SaveManager = {} do
 				return { type = 'Input', idx = idx, text = object.Value }
 			end,
 			Load = function(idx, data)
-				if Options[idx] and type(data.text) == 'string' then
-					Options[idx]:SetValue(data.text)
+				if SaveManager.Library.Options[idx] and type(data.text) == 'string' then
+					SaveManager.Library.Options[idx]:SetValue(data.text)
 				end
 			end,
 		},
@@ -111,6 +114,20 @@ local SaveManager = {} do
 		return true
 	end
 
+	function SaveManager:Delete(name)
+		if (not name) then
+			return false, 'no config file is selected'
+		end
+
+		local fullPath = self.Folder .. '/settings/' .. name .. '.json'
+
+		if isfile(fullPath) then
+            delfile(fullPath)
+        end
+
+		return true
+	end
+	
 	function SaveManager:Load(name)
 		if (not name) then
 			return false, 'no config file is selected'
@@ -197,19 +214,16 @@ local SaveManager = {} do
 		end
 	end
 
-
 	function SaveManager:BuildConfigSection(tab)
 		assert(self.Library, 'Must set SaveManager.Library')
 
 		local section = tab:AddRightGroupbox('Configuration')
 
-		section:AddInput('SaveManager_ConfigName',    { Text = 'Config name' })
-		section:AddDropdown('SaveManager_ConfigList', { Text = 'Config list', Values = self:RefreshConfigList(), AllowNull = true })
+		section:AddInput('SaveManager_ConfigName',    { Text = 'Config Name' })
+		section:AddDropdown('SaveManager_ConfigList', { Text = 'Config List', Values = self:RefreshConfigList(), AllowNull = true})
 
-		section:AddDivider()
-
-		section:AddButton('Create config', function()
-			local name = Options.SaveManager_ConfigName.Value
+		section:AddButton('Create', function()
+			local name = self.Library.Options.SaveManager_ConfigName.Value
 
 			if name:gsub(' ', '') == '' then 
 				return self.Library:Notify('Invalid config name (empty)', 2)
@@ -222,10 +236,30 @@ local SaveManager = {} do
 
 			self.Library:Notify(string.format('Created config %q', name))
 
-			Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
-			Options.SaveManager_ConfigList:SetValue(nil)
-		end):AddButton('Load config', function()
-			local name = Options.SaveManager_ConfigList.Value
+			self.Library.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
+			self.Library.Options.SaveManager_ConfigList:SetValue(nil)
+		end):AddButton('Delete', function()
+            local name = self.Library.Options.SaveManager_ConfigList.Value
+
+			local success, err = self:Delete(name)
+			if not success then
+				return self.Library:Notify('Failed to delete config: ' .. err)
+			end
+
+			if isfile(self.Folder .. '/settings/autoload.txt') and readfile(self.Folder .. '/settings/autoload.txt') == name then
+				delfile(self.Folder .. '/settings/autoload.txt')
+			
+				SaveManager.AutoloadLabel:SetText("Current Autoload - N/A")
+			end
+
+            self.Library:Notify(string.format('Deleted config %q', name))
+
+            self.Library.Options.SaveManager_ConfigList:SetValue(nil)
+			self.Library.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
+		end)
+        
+        section:AddButton('Load', function()
+			local name = self.Library.Options.SaveManager_ConfigList.Value
 
 			local success, err = self:Load(name)
 			if not success then
@@ -233,10 +267,8 @@ local SaveManager = {} do
 			end
 
 			self.Library:Notify(string.format('Loaded config %q', name))
-		end)
-
-		section:AddButton('Overwrite config', function()
-			local name = Options.SaveManager_ConfigList.Value
+		end):AddButton('Overwrite', function()
+			local name = self.Library.Options.SaveManager_ConfigList.Value
 
 			local success, err = self:Save(name)
 			if not success then
@@ -246,23 +278,23 @@ local SaveManager = {} do
 			self.Library:Notify(string.format('Overwrote config %q', name))
 		end)
 
-		section:AddButton('Refresh list', function()
-			Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
-			Options.SaveManager_ConfigList:SetValue(nil)
+		section:AddButton('Refresh List', function()
+			self.Library.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
+			self.Library.Options.SaveManager_ConfigList:SetValue(nil)
 		end)
 
-		section:AddButton('Set as autoload', function()
-			local name = Options.SaveManager_ConfigList.Value
+		section:AddButton('Set Autoload', function()
+			local name = self.Library.Options.SaveManager_ConfigList.Value
 			writefile(self.Folder .. '/settings/autoload.txt', name)
-			SaveManager.AutoloadLabel:SetText('Current autoload config: ' .. name)
+			SaveManager.AutoloadLabel:SetText('Current Autoload - ' .. name)
 			self.Library:Notify(string.format('Set %q to auto load', name))
 		end)
 
-		SaveManager.AutoloadLabel = section:AddLabel('Current autoload config: none', true)
+		SaveManager.AutoloadLabel = section:AddLabel('Current Autoload - N/A', true)
 
 		if isfile(self.Folder .. '/settings/autoload.txt') then
 			local name = readfile(self.Folder .. '/settings/autoload.txt')
-			SaveManager.AutoloadLabel:SetText('Current autoload config: ' .. name)
+			SaveManager.AutoloadLabel:SetText('Current Autoload - ' .. name)
 		end
 
 		SaveManager:SetIgnoreIndexes({ 'SaveManager_ConfigList', 'SaveManager_ConfigName' })
