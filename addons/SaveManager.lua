@@ -92,13 +92,13 @@ local SaveManager = {} do
 			objects = {}
 		}
 
-		for idx, toggle in next, Toggles do
+		for idx, toggle in next, self.Library.Toggles do
 			if self.Ignore[idx] then continue end
 
 			table.insert(data.objects, self.Parser[toggle.Type].Save(idx, toggle))
 		end
 
-		for idx, option in next, Options do
+		for idx, option in next, self.Library.Options do
 			if not self.Parser[option.Type] then continue end
 			if self.Ignore[idx] then continue end
 
