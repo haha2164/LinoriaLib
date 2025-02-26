@@ -250,4 +250,4 @@ local ThemeManager = {} do
 	ThemeManager:BuildFolderTree()
 end
 
-return ThemeManage
+return ThemeManager
