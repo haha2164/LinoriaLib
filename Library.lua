@@ -2566,6 +2566,10 @@ do
             Library:SafeCallback(Dropdown.Changed, Dropdown.Value);
         end;
 
+        Dropdown:OnChanged(function()
+            Library:UpdateDependencyBoxes()
+        end)
+        
         DropdownOuter.InputBegan:Connect(function(Input)
             if Input.UserInputType == Enum.UserInputType.MouseButton1 and not Library:MouseIsOverOpenedFrame() then
                 if ListOuter.Visible then
@@ -2679,7 +2683,7 @@ do
                 local Elem = Dependency[1];
                 local Value = Dependency[2];
 
-                if Elem.Type == 'Toggle' and Elem.Value ~= Value then
+                if (Elem.Type == 'Toggle' or Elem.Type == 'Dropdown') and Elem.Value ~= Value then
                     Holder.Visible = false;
                     Depbox:Resize();
                     return;
