@@ -11,15 +11,10 @@ local RenderStepped = RunService.RenderStepped;
 
 local Mouse = cloneref(Players.LocalPlayer:GetMouse());
 
-local ScreenGui = Instance.new('ScreenGui');
-
-if getgenv and getgenv().gethui then
-    ScreenGui.Parent = getgenv().gethui()
-else
-    ScreenGui.Parent = cloneref(game:GetService('CoreGui'));
+local ScreenGui = Instance.new('ScreenGui'); do
+    ScreenGui.Parent = cloneref(Players.LocalPlayer.PlayerGui);
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
 end
-
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
 
 local Library = {
     Toggles = {};
