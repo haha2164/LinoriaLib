@@ -12,7 +12,7 @@ local RenderStepped = RunService.RenderStepped;
 local Mouse = cloneref(Players.LocalPlayer:GetMouse());
 
 local ScreenGui = Instance.new('ScreenGui'); do
-    ScreenGui.Parent = cloneref(game:GetService('CoreGui');
+    ScreenGui.Parent = cloneref(game:GetService('CoreGui'));
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
 end
 
