@@ -35,20 +35,6 @@ local Library = {
     Black = Color3.new(0, 0, 0);
     Font = Enum.Font.RobotoMono,
 
-    BlacklistedKeys = {
-        [Enum.KeyCode.W] = true;
-        [Enum.KeyCode.A] = true;
-        [Enum.KeyCode.S] = true;
-        [Enum.KeyCode.D] = true;
-        [Enum.KeyCode.Space] = true;
-        [Enum.KeyCode.Escape] = true;
-        [Enum.KeyCode.Backspace] = true;
-        [Enum.KeyCode.Slash] = true;
-        [Enum.KeyCode.Return] = true;
-        [Enum.KeyCode.Delete] = true;
-        [Enum.KeyCode.Insert] = true,
-    };
-
     OpenedFrames = {};
     DependencyBoxes = {};
 
@@ -1162,7 +1148,7 @@ do
 
             local State = KeyPicker:GetState();
 
-            ContainerLabel.Text = string.format('[%s] %s', KeyPicker.Value, Info.Text);
+            ContainerLabel.Text = string.format('[%s] %s - [%s]', KeyPicker.Value, Info.Text, KeyPicker.Mode);
 
             ContainerLabel.Visible = KeyPicker.Value ~= 'None' and true or false;
             ContainerLabel.TextColor3 = State and Library.AccentColor or Library.FontColor;
@@ -1208,10 +1194,8 @@ do
         function KeyPicker:SetValue(Data)
             local Key, Mode = Data[1], Data[2];
             
-            if Key ~= "None" then
-                DisplayLabel.Text = Key;
-                KeyPicker.Value = Key;
-            end
+            DisplayLabel.Text = Key == "None" and "..." or Key;
+            KeyPicker.Value = Key;
             
             ModeButtons[Mode]:Select();
             KeyPicker:Update();
@@ -1267,7 +1251,7 @@ do
 
                 local Event;
                 Event = InputService.InputBegan:Connect(function(Input)
-                     if Library.BlacklistedKeys[Input.KeyCode] or Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                     if Input.KeyCode == Enum.KeyCode.Backspace then
                         Break = true;
                         Picking = false;
 
@@ -1288,6 +1272,8 @@ do
 
                     if Input.UserInputType == Enum.UserInputType.Keyboard then
                         Key = Input.KeyCode.Name;
+                    elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        Key = 'MB1';
                     elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
                         Key = 'MB2';
                     end;
