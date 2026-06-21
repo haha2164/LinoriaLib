@@ -1147,7 +1147,7 @@ do
 
             local State = KeyPicker:GetState();
 
-            ContainerLabel.Text = string.format('[%s] %s - [%s]', KeyPicker.Value, Info.Text, KeyPicker.Mode);
+            ContainerLabel.Text = string.format('[%s] %s - (%s)', KeyPicker.Value, Info.Text, KeyPicker.Mode);
 
             ContainerLabel.Visible = KeyPicker.Value ~= 'None' and true or false;
             ContainerLabel.TextColor3 = State and Library.AccentColor or Library.FontColor;
