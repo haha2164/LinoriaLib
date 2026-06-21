@@ -3354,7 +3354,7 @@ function Library:CreateWindow(...)
                 BackgroundColor3 = Library.AccentColor;
                 BorderSizePixel = 0;
                 Size = UDim2.new(1, 0, 0, 2);
-                ZIndex = 6;
+                ZIndex = 10;
                 Parent = BoxInner;
             });
 
