@@ -13,7 +13,7 @@ local ThemeManager = {} do
 		['Onetap'] = { 4, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1e1d22","AccentColor":"faa614","BackgroundColor":"18181c","OutlineColor":"313033"}') },
 		['Neverlose'] = { 5, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"0c1014","AccentColor":"01a3f1","BackgroundColor":"0c0f14","OutlineColor":"191919"}') },
 		['Skeet'] = { 6, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"131313","AccentColor":"01ff54","BackgroundColor":"151515","OutlineColor":"2a2a2a"}') },
-		['Primordial'] = { 7, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"131313","AccentColor":"01ff54","BackgroundColor":"151515","OutlineColor":"2a2a2a"}') }
+		['Primordial'] = { 7, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"181818","AccentColor":"d7a6b0","BackgroundColor":"1f1f1f","OutlineColor":"2a2a2a"}') }
 	}
 
 	function ThemeManager:ApplyTheme(theme)
