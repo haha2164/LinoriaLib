@@ -8,12 +8,12 @@ local ThemeManager = {} do
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
 		['Default'] = { 1, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1c1c1c","AccentColor":"9F6236","BackgroundColor":"141414","OutlineColor":"323232"}') },
-		['Gamesense'] = { 2, HttpService:JSONDecode('{"FontColor":"919191","MainColor":"101010","AccentColor":"9CB819","SelectedTabColor":"101010","BackgroundColor":"111111","OutlineColor":"2D2D2D"}') },
-		['Mae'] = { 3, HttpService:JSONDecode('{"FontColor":"c5c5c5","MainColor":"0F0F0F","AccentColor":"ffc6fe","SelectedTabColor":"171717","BackgroundColor":"0f0f0f","OutlineColor":"191919"}') },
-		['Fatality'] = { 4, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1e1842","AccentColor":"c50754","BackgroundColor":"191335","OutlineColor":"3c355d"}') },
-		['Jester'] = { 5, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"242424","AccentColor":"db4467","BackgroundColor":"1c1c1c","OutlineColor":"373737"}') },
-		['Mint'] = { 6, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"242424","AccentColor":"3db488","BackgroundColor":"1c1c1c","OutlineColor":"373737"}') },
-		['Tokyo Night'] = { 7, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"191925","AccentColor":"6759b3","BackgroundColor":"16161f","OutlineColor":"323232"}') }
+		['Gamesense'] = { 2, HttpService:JSONDecode('{"FontColor":"919191","MainColor":"101010","AccentColor":"9CB819","BackgroundColor":"111111","OutlineColor":"2D2D2D"}') },
+		['Fatality'] = { 3, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1e1842","AccentColor":"c50754","BackgroundColor":"191335","OutlineColor":"3c355d"}') },
+		['Onetap'] = { 4, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1e1d22","AccentColor":"faa614","BackgroundColor":"18181c","OutlineColor":"313033"}') },
+		['Neverlose'] = { 5, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"0c1014","AccentColor":"01a3f1","BackgroundColor":"0c0f14","OutlineColor":"191919"}') },
+		['Skeet'] = { 6, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"131313","AccentColor":"01ff54","BackgroundColor":"151515","OutlineColor":"2a2a2a"}') },
+		['Primordial'] = { 7, HttpService:JSONDecode('{"FontColor":"ffffff","MainColor":"131313","AccentColor":"01ff54","BackgroundColor":"151515","OutlineColor":"2a2a2a"}') }
 	}
 
 	function ThemeManager:ApplyTheme(theme)
